@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SendChat;
+use App\Http\Resources\MessageResource;
 use App\Models\Message;
 use App\Http\Requests\StoreMessageRequest;
 use App\Http\Requests\UpdateMessageRequest;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class MessageController extends Controller
 {
@@ -15,7 +20,7 @@ class MessageController extends Controller
      */
     public function index()
     {
-        //
+        return Message::with('user')->get();
     }
 
     /**
@@ -34,9 +39,18 @@ class MessageController extends Controller
      * @param  \App\Http\Requests\StoreMessageRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreMessageRequest $request)
+    public function store(StoreMessageRequest $request): JsonResponse
     {
-        //
+        $validated = $request->validated();
+        $user = auth()->user();
+
+        $message = $user->messages()->create($validated);
+
+        broadcast(new SendChat($user, $message))->toOthers();
+
+        $data = new MessageResource($message);
+
+        return response()->json($data, 201);
     }
 
     /**

@@ -6,14 +6,5 @@
 
 <script lang='ts' setup>
 
-import { Ref, ref } from 'vue';
-import User from './types/User';
-import Login from './Components/Login.vue';
-
-type UserSession = Ref<User | undefined>;
-
-const user: UserSession = ref();
-
-
 </script>
 

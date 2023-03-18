@@ -1,22 +1,16 @@
-import './bootstrap';
+import './bootstrap/echo';
 
-import { createApp } from 'vue';
-import { createRouter, createWebHashHistory } from 'vue-router';
+import { createApp, watch } from 'vue';
+import { createPinia } from 'pinia';
 
-import Login from '@/Components/Login.vue';
-import Register from '@/Components/Register.vue';
-
-const routes = [
-    { path: '/', component: Login },
-    { path: '/register', component: Register },
-];
-
-const router = createRouter({
-    history: createWebHashHistory(),
-    routes,
-});
 
 import App from './App.vue';
+import router from './bootstrap/router';
 
-createApp(App).use(router).mount('#app');
+const pinia = createPinia();
+
+createApp(App)
+    .use(pinia)
+    .use(router)
+    .mount('#app');
 

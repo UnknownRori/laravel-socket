@@ -52,7 +52,6 @@ async function submit() {
     }
 
     const result: AxiosResponse<Message> = await axios.post('/api/message', form.value, { headers: { Authorization: `Bearer ${auth.token}` } });
-    messageList.value.push(result.data);
 }
 
 onMounted(async () => {
